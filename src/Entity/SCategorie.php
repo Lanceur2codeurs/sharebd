@@ -16,7 +16,7 @@ use App\Entity\Categorie;
     errorPath: 'numero',
     message: 'Le numéro est déjà utilisé pour cette catégorie.',
 )]
-
+#[ORM\EntityListeners([SCategorieListener::class])]
 class SCategorie
 {
     #[ORM\Id]

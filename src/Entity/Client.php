@@ -9,18 +9,10 @@ use App\Entity\User;
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client extends User
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
+   
     #[ORM\ManyToOne(inversedBy: 'clients')]
     private ?Abonnement $abo = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getAbo(): ?Abonnement
     {
