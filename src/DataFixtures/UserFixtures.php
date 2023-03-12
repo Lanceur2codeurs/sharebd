@@ -25,7 +25,7 @@ class UserFixtures extends Fixture
             $user->setNom($this->faker->lastName())
             ->setPrenom($this->faker->firstName())
             ->setRoles(array('ROLE_USER'))
-            ->setEmail(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE',strtolower($user->getPrenom()).'.'.strtolower($user->getNom()).'@'.$this->faker->freeEmailDomain()))
+            ->setEmail(strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE',$user->getPrenom().'.'.$user->getNom().'@'.$this->faker->freeEmailDomain())))
             ->setPassword($this->passwordHasher->hashPassword($user, strtolower($user->getPrenom())))
             ->setDateInscription($this->faker->dateTimeThisYear())
             ->setIsVerified(true);

@@ -37,11 +37,15 @@ class Fichier
     #[ORM\ManyToOne(inversedBy: 'fichiers')]
     private ?User $proprietaire = null;
 
+    #[ORM\ManyToMany(targetEntity: SCategorie::class, inversedBy: 'fichiers')]
+    private Collection $lesSousCategories;
+
     
 
     public function __construct()
     {
         $this->telechargers = new ArrayCollection();
+        $this->lesSousCategories = new ArrayCollection();
        
     }
 
@@ -148,6 +152,30 @@ class Fichier
     public function setProprietaire(?User $proprietaire): self
     {
         $this->proprietaire = $proprietaire;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SCategorie>
+     */
+    public function getLesSousCategories(): Collection
+    {
+        return $this->lesSousCategories;
+    }
+
+    public function addLesSousCategory(SCategorie $lesSousCategory): self
+    {
+        if (!$this->lesSousCategories->contains($lesSousCategory)) {
+            $this->lesSousCategories->add($lesSousCategory);
+        }
+
+        return $this;
+    }
+
+    public function removeLesSousCategory(SCategorie $lesSousCategory): self
+    {
+        $this->lesSousCategories->removeElement($lesSousCategory);
 
         return $this;
     }

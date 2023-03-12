@@ -6,18 +6,18 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use App\Entity\Fichier;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 use Symfony\Polyfill\Intl\Normalizer\Normalizer;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class FichierFixtures extends Fixture implements DependentFixtureInterface
 {
     private $faker;
-    private $passwordHasher;
+    
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher){
+    public function __construct(){
         $this->faker=Factory::create("fr_FR");
-        $this->passwordHasher= $passwordHasher;
+       
  }
 
     public function load(ObjectManager $manager): void

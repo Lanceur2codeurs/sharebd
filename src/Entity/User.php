@@ -48,10 +48,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'proprietaire', targetEntity: Fichier::class)]
     private Collection $fichiers;
 
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'accepters')]
+    private Collection $accepter;
+
+    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'accepter')]
+    #[ORM\JoinTable(name: 'accepter')]
+    private Collection $accepters;
+
     public function __construct()
     {
         $this->telechargers = new ArrayCollection();
         $this->fichiers = new ArrayCollection();
+        $this->accepter = new ArrayCollection();
+        $this->accepters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -249,5 +258,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getAccepter(): Collection
+    {
+        return $this->accepter;
+    }
+
+    public function addAccepter(self $accepter): self
+    {
+        if (!$this->accepter->contains($accepter)) {
+            $this->accepter->add($accepter);
+        }
+
+        return $this;
+    }
+
+    public function removeAccepter(self $accepter): self
+    {
+        $this->accepter->removeElement($accepter);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getAccepters(): Collection
+    {
+        return $this->accepters;
     }
 }
