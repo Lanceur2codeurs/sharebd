@@ -59,12 +59,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name: 'accepter')]
     private Collection $accepters;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Partager::class)]
+    private Collection $partagers;
+
     public function __construct()
     {
         $this->telechargers = new ArrayCollection();
         $this->fichiers = new ArrayCollection();
         $this->accepter = new ArrayCollection();
         $this->accepters = new ArrayCollection();
+        $this->partagers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -294,5 +298,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getAccepters(): Collection
     {
         return $this->accepters;
+    }
+
+    /**
+     * @return Collection<int, Partager>
+     */
+    public function getPartagers(): Collection
+    {
+        return $this->partagers;
+    }
+
+    public function addPartager(Partager $partager): self
+    {
+        if (!$this->partagers->contains($partager)) {
+            $this->partagers->add($partager);
+            $partager->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePartager(Partager $partager): self
+    {
+        if ($this->partagers->removeElement($partager)) {
+            // set the owning side to null (unless already changed)
+            if ($partager->getUser() === $this) {
+                $partager->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

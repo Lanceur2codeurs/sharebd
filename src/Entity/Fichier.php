@@ -40,12 +40,16 @@ class Fichier
     #[ORM\ManyToMany(targetEntity: SCategorie::class, inversedBy: 'fichiers')]
     private Collection $lesSousCategories;
 
+    #[ORM\OneToMany(mappedBy: 'fichier', targetEntity: Partager::class)]
+    private Collection $partagers;
+
     
 
     public function __construct()
     {
         $this->telechargers = new ArrayCollection();
         $this->lesSousCategories = new ArrayCollection();
+        $this->partagers = new ArrayCollection();
        
     }
 
@@ -176,6 +180,36 @@ class Fichier
     public function removeLesSousCategory(SCategorie $lesSousCategory): self
     {
         $this->lesSousCategories->removeElement($lesSousCategory);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Partager>
+     */
+    public function getPartagers(): Collection
+    {
+        return $this->partagers;
+    }
+
+    public function addPartager(Partager $partager): self
+    {
+        if (!$this->partagers->contains($partager)) {
+            $this->partagers->add($partager);
+            $partager->setFichier($this);
+        }
+
+        return $this;
+    }
+
+    public function removePartager(Partager $partager): self
+    {
+        if ($this->partagers->removeElement($partager)) {
+            // set the owning side to null (unless already changed)
+            if ($partager->getFichier() === $this) {
+                $partager->setFichier(null);
+            }
+        }
 
         return $this;
     }
